@@ -10,14 +10,9 @@
 #echo 'postgres:newpassword' | chpasswd
 #echo -e "linuxpassword\nlinuxpassword" | passwd postgresql
 whoami
+sudo su - postgres -c "createuser concourse"
 
-sudo su - postgres
-id -u concourse &>/dev/null || useradd concourse 
-psql -U postgres << EOF
-ALTER USER concourse WITH ENCRYPTED password 'DBPassword';
-CREATE DATABASE concourse OWNER concourse;
-EOF
-\q
-exit
-whoami
+sudo su - postgres -c "psql -c \"ALTER USER concourse WITH ENCRYPTED password 'DBPassword';\""
+
+sudo su - postgres -c "psql -c \"CREATE DATABASE concourse OWNER concourse;\""
 
